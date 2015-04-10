@@ -5,6 +5,7 @@ import urllib.parse
 import subprocess
 import re
 import os
+import argparse
 
 
 def geturlsads(searchstring="",
@@ -449,3 +450,6 @@ def mdpdf(dokid, path):
         index += 1
     return metadata
 
+
+if '__name__' == '__main__':
+    parser = argparse.ArgumentParser(description="Indexing RDF file in Elasticsearch")
