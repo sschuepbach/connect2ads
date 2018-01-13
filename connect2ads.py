@@ -379,44 +379,6 @@ def geturlsads(searchstring="",
     return docsmeta
 
 
-def wgeturllist(urllist, ofile):
-    """
-    Erstellt eine Liste von URLs zur Verwendung mit wget
-    :param urllist:
-    :param ofile:
-    :return:
-    """
-    tmpstr = ""
-    for u in urllist:
-        tmpstr = tmpstr + u["url"] + "\n"
-    file = open(ofile, "w")
-    file.write(tmpstr)
-    file.close()
-
-
-def wgetfiles(url, dokid, path=os.getcwd()):
-    """
-    Lädt Datei herunter
-    :param url:
-    :param dokid:
-    :param path:
-    :return:
-    """
-    path += dokid + ".pdf"
-    subprocess.call(["wget", "-q", url, "-O", path])
-    return path
-
-
-def countdocs(urllist):
-    """
-    Gibt die Anzahl Treffer einer Suche zurück
-    :param urllist:
-    Urls als Liste/Diktionär
-    :return:
-    Anzahl der Treffer
-    """
-    return len(urllist)
-
 
 def mdpdf(dokid, path):
     ofile = dokid + ".txt"
@@ -452,4 +414,29 @@ def mdpdf(dokid, path):
 
 
 if '__name__' == '__main__':
-    parser = argparse.ArgumentParser(description="Indexing RDF file in Elasticsearch")
+    parser = argparse.ArgumentParser(description="Extracts documents and metadata from Amtsdruckschriften")
+    parser.add_argument('--searchstring', metavar='<str>', dest='searchstring', type=str, default='',
+                        help='Search term(s)')
+    parser.add_argument('--querytype', metavar='<str>', dest='querytype', type=str, choices=['boolean', 'pattern'],
+                        default='boolean', help='Exact (boolean) or fuzzy (pattern) search. Defaults to boolean')
+    parser.add_argument('--titleweight', metavar='<str>', dest='titleweight', type=str,
+                        choices=['false', 'on'], default='false',
+                        help='Terms in title are weighted more. Defaults to false')
+    parser.add_argument('--titlestring', metavar='<str>', dest='titlestring', type=str, default='',
+                        help='Search term(s) in title')
+    # TODO: Right format should be checked
+    parser.add_argument('--fromdate', metavar='<dd.mm.yyyy>', dest='fromdate', type=str, required=True,
+                        help='Start date in form dd.mm.yyy')
+    # TODO: Right format should be checked
+    parser.add_argument('--todate', metavar='<dd.mm.yyyy>', dest='todate', type=str, required=True,
+                        help='End date in form dd.mm.yyy')
+    # TODO: Reformat as string
+    parser.add_argument('--volno', metavar='<int>', dest='volno')
+    # TODO: Reformat as string
+    parser.add_argument('--bookletno', metavar='<int>')
+    parser.add_argument('--doctype')
+    parser.add_argument('--category')
+    parser.add_argument('--council')
+    parser.add_argument('--author')
+    parser.add_argument('--refno')
+    parser.add_argument('--lang')
